@@ -1,0 +1,5 @@
+name = "Sung Jun Kim"
+SID = "22996182"
+email = "sjk@berkeley.edu"
+github_name = "sjkay"
+status = "enrolled"
