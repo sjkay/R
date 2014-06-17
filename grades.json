@@ -1,0 +1,17 @@
+{
+    "email": "sjk@berkeley.edu", 
+    "github_name": "sjkay", 
+    "grades": {
+        "lab2": {
+            "earned": 10, 
+            "hash": "eac3abb9c45591f6f9eb378aa95bd49c0047bdff", 
+            "note": "", 
+            "penalty": 0, 
+            "possible": 10
+        }
+    }, 
+    "login": "sjkay", 
+    "name": "Sung Jun Kim", 
+    "status": "enrolled", 
+    "url": "git@github.com:sjkay/stat133.git"
+}
