@@ -100,8 +100,11 @@ tryCatch(
 subset.2010 <- temperature.data[temperature.data$year == 2010, ]
 temp.differences <- subset.2010$max - subset.2010$min
 max.differences <- max(temp.differences)
-max.differences.day <- subset.2010$day[which(temp.differences == max(temp.differences))]
-#same result for max.differences.day comes from just using which(temp.differences == max(temp.differences))
+#sum(temp.differences == max.differences)
+	#to check if there are multiple days that have maximum spread
+max.differences.day <- subset.2010$day[which(temp.differences == max.differences)]
+#max.differences.day <- which(temp.differences == max.differences)
+	#this gives the same result since days and position are equal
 
 
 
@@ -114,7 +117,8 @@ max.differences.day <- subset.2010$day[which(temp.differences == max(temp.differ
 # determining these subsets
     
 cutoff <- quantile(temperature.data$max, 0.65)
-#sum(temperature.data == cutoff) to check if theres any values exactly at cutoff
+#sum(temperature.data == cutoff)
+	#to check if theres any values exactly at cutoff
 above65 <- temperature.data[temperature.data$max > cutoff, ]
 below65 <- temperature.data[temperature.data$max < cutoff, ]
 mean.low.above <- mean(above65$min)
