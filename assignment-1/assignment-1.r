@@ -41,7 +41,7 @@ toCelcius <- function(temp.far) {
     # This function should take a vector of Farenheit temperature values
     # <temp.far> and return the values of each entry in Celcius
 
-    #your code here
+    ((temp.far) - 32) * 5 / 9
 
 }
 
@@ -71,7 +71,9 @@ calculateS <- function(data, selected.year, selected.day) {
                                                          selected.day > 31))
         stop('invalid date')
     
-    #your code here
+    selectedday.data <- temperature.data[temperature.data$day == selected.day, ]
+    selected.data <- selectedday.data[selectedday.data$year == selected.year,]
+    (selected.data$max - selected.data$min) / selected.data$mean
     
 }
 
@@ -96,10 +98,10 @@ tryCatch(
 #spread and the day on which it occured.  Store these as the variables:
 #<subset.2010>, <temp.differences>, <max.difference>, and <max.difference.day>.
 
-#subset.2010 <- #your code here
-#temp.differences <- #your code here
-#max.differences <- #your code here
-#max.differences.day <- #your code here
+subset.2010 <- temperature.data[temperature.data$year == 2010, ]
+temp.differences <- subset.2010$max - subset.2010$min
+max.differences <- max(temp.differences)
+max.differences.day <- which(temp.differences == max(temp.differences))
 
 
 # --------------------------------------------------------------
@@ -110,9 +112,12 @@ tryCatch(
 # temperatures below the 65th percentile. Use strict inequalities when
 # determining these subsets
     
-#your code here
-#mean.low.above <- #your code here
-#mean.low.below <- #your code here
+#quantile(temperature.data$max, probs = seq(0, 1, 0.65))
+#sum(temperature.data == 65.75)
+above65 <- temperature.data[temperature.data$max > 65.75, ]
+below65 <- temperature.data[temperature.data$max < 65.75, ]
+mean.low.above <- mean(above65$min)
+mean.low.below <- mean(below65$min)
 
 # --------------------------------------------------------------
 # Problem 3
@@ -125,7 +130,8 @@ tryCatch(
 # (as given by <animal.key>).  Store these vectors as <observed.diets> and
 # <observed.types> respectively.
 
-#your code here
+#herbivoreanimals <- animal.key$animal[(which(animal.key$diet=="herbivore"))]
+#carnivoreanimals <- animal.key$animal[(which(animal.key$diet=="carnivore"))]
 #observed.diets <- #your code here
 #observed.types <- #your code here
 
