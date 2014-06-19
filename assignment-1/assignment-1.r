@@ -71,8 +71,7 @@ calculateS <- function(data, selected.year, selected.day) {
                                                          selected.day > 31))
         stop('invalid date')
     
-    selectedday.data <- temperature.data[temperature.data$day == selected.day, ]
-    selected.data <- selectedday.data[selectedday.data$year == selected.year,]
+    selected.data <- temperature.data[temperature.data$year == selected.year & temperature.data$day == selected.day, ]
     (selected.data$max - selected.data$min) / selected.data$mean
     
 }
@@ -101,7 +100,9 @@ tryCatch(
 subset.2010 <- temperature.data[temperature.data$year == 2010, ]
 temp.differences <- subset.2010$max - subset.2010$min
 max.differences <- max(temp.differences)
-max.differences.day <- which(temp.differences == max(temp.differences))
+max.differences.day <- subset.2010$day[which(temp.differences == max(temp.differences))]
+#same result for max.differences.day comes from just using which(temp.differences == max(temp.differences))
+
 
 
 # --------------------------------------------------------------
@@ -112,10 +113,10 @@ max.differences.day <- which(temp.differences == max(temp.differences))
 # temperatures below the 65th percentile. Use strict inequalities when
 # determining these subsets
     
-#quantile(temperature.data$max, probs = seq(0, 1, 0.65))
-#sum(temperature.data == 65.75)
-above65 <- temperature.data[temperature.data$max > 65.75, ]
-below65 <- temperature.data[temperature.data$max < 65.75, ]
+cutoff <- quantile(temperature.data$max, 0.65)
+#sum(temperature.data == cutoff) to check if theres any values exactly at cutoff
+above65 <- temperature.data[temperature.data$max > cutoff, ]
+below65 <- temperature.data[temperature.data$max < cutoff, ]
 mean.low.above <- mean(above65$min)
 mean.low.below <- mean(below65$min)
 
@@ -130,15 +131,13 @@ mean.low.below <- mean(below65$min)
 # (as given by <animal.key>).  Store these vectors as <observed.diets> and
 # <observed.types> respectively.
 
-#herbivoreanimals <- animal.key$animal[(which(animal.key$diet=="herbivore"))]
-#carnivoreanimals <- animal.key$animal[(which(animal.key$diet=="carnivore"))]
-#observed.diets <- #your code here
-#observed.types <- #your code here
+observed.diets <- animal.key$diet[match(observed.animals, animal.key$animal)]
+observed.types <- animal.key$type[match(observed.animals, animal.key$animal)]
 
 # Use your newly created vectors to calculate the total number of observed
 # animals that are both carnivores and mammals.  Store this variable as
 # <carnivore.mammals>
 
-#n.carnivore.mammals <- #your code here
+n.carnivore.mammals <- sum(observed.diets == "carnivore" & observed.types == "mammal")
 
     
