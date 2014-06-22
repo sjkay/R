@@ -2,6 +2,13 @@
     "email": "sjk@berkeley.edu", 
     "github_name": "sjkay", 
     "grades": {
+        "assignment-1": {
+            "earned": 26, 
+            "hash": "711418eb881d8bbf57330b03342d249face54a28", 
+            "note": "", 
+            "penalty": 0, 
+            "possible": 30
+        }, 
         "lab2": {
             "earned": 10, 
             "hash": "eac3abb9c45591f6f9eb378aa95bd49c0047bdff", 
