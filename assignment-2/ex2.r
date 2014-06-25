@@ -22,8 +22,8 @@ truncate <- function(input.vector, trim) {
     x <- input.vector
     lower.q <- quantile(x, trim)
     upper.q <- quantile(x, 1 - trim)
-    new.x <- x[x >= lower.q & x <= upper.q]
-    return(new.x)
+    truncated.vector <- x[x >= lower.q & x <= upper.q]
+    return(truncated.vector)
     
 }
 
