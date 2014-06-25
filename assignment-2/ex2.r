@@ -19,8 +19,12 @@ truncate <- function(input.vector, trim) {
 
     stopifnot(0<=trim & trim<=0.5)
     
-    # your code here
-
+    x <- input.vector
+    lower.q <- quantile(x, trim)
+    upper.q <- quantile(x, 1 - trim)
+    new.x <- x[x >= lower.q & x <= upper.q]
+    return(new.x)
+    
 }
 
 tryCatch(checkEquals(c(2, 3, 4), truncate(1:5, trim=0.25)), error=function(err)
@@ -49,7 +53,11 @@ tryCatch(checkIdentical(integer(0), truncate(1:6, trim=0.5)),
 
 standardNormalize <- function(input.vector) {
 
-    # your code here
+    mean <- mean(input.vector)
+    sd <- sd(input.vector)
+    sn.vector <- (input.vector - mean)/sd
+    outlier <- any(sn.vector > 3 | sn.vector < -3)
+    list(sn.vector, outlier)
 
 }
 
