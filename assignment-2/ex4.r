@@ -33,6 +33,11 @@
 avgGoalDiff <- function(data, team.name) {
 
     # your code here
+    goals.for <- data$gs[data$team == team.name]
+    goals.against <- data$ga[data$team == team.name]
+    games.played <- data$gp[data$team == team.name]
+    avg.diff <- (goals.for - goals.against)/games.played
+    return(avg.diff)
  
 }
 
@@ -52,6 +57,11 @@ avgGoalDiff <- function(data, team.name) {
 cardFoulRatio <- function(data, team.name) {
 
     # your code here
+    red.cards <- data$rc[data$team == team.name]
+    yellow.cards <- data$yc[data$team == team.name]
+    fouls <- data$fouls[data$team == team.name]
+    cf.ratio <- (red.cards + yellow.cards) / fouls
+    return(cf.ratio)
  
 }
 
@@ -70,6 +80,10 @@ cardFoulRatio <- function(data, team.name) {
 rankAGD <- function(data) {
 
     # your code here
+    data.waGD <- transform(data, aGD=avgGoalDiff(data, data$team))
+    ranked.data <- data.waGD[order(data.waGD$aGD, decreasing=TRUE), ]
+    ranked.teams <- as.character(ranked.data$team)
+    return(ranked.teams)
 
 }
 
@@ -80,10 +94,12 @@ rankAGD <- function(data) {
 # ratios less than 0.12. Store this varialbe as <low.cfr.teams>. Run your
 # "rankAGD" function on this subset and store the variable as <low.cfr.rank>.
 
-# wc.data <- # your code here
-#cfr.teams <- # your code here
-#low.cfr.teams <- # your code here
-#low.cfr.rank <- # your code here
+wc.data <- read.table('world_cup.data', sep = " ", header=T)
+cfr.teams <- sapply(as.character(wc.data$team), function(team.name) cardFoulRatio(wc.data, team.name))
+#sapply(wc.data$team, function(team.name) cardFoulRatio(wc.data, team.name))
+low.cfr.teams <- wc.data[cfr.teams<0.12,]
+#wc.data[as.list(cfr.teams)<0.12,]
+low.cfr.rank <- rankAGD(low.cfr.teams)
 
 
 library(RUnit)
