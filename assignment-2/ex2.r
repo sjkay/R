@@ -24,7 +24,7 @@ truncate <- function(input.vector, trim) {
     upper.q <- quantile(x, 1 - trim)
     new.x <- x[x >= lower.q & x <= upper.q]
     return(new.x)
-    
+     
 }
 
 tryCatch(checkEquals(c(2, 3, 4), truncate(1:5, trim=0.25)), error=function(err)
