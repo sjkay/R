@@ -16,7 +16,7 @@ load('prostatedata.Rda')
 # As we mentioned, patients with prostate cancer are labeled with a 2. How many of
 # these patients are there?
 
-# n.prostate <- # your code here
+n.prostate <- sum(colnames(prost.data)==2)
 
 # Suppose we're interested in the mean of the expression levels for each gene,
 # broken down by cancer status. Please create a 2 x 1000 matrix giving the
@@ -26,8 +26,14 @@ load('prostatedata.Rda')
 # gene from the first row averaged over all patients without prostate
 # cancer). Do the same for a trimmed mean with trim parameter of 0.1.
 
-# status.means <- # your code here
-# status.trim.means <- # your code here
+means.without <- apply(prost.data[,colnames(prost.data) == 1], 1, mean)
+means.with <- apply(prost.data[,colnames(prost.data) == 2], 1, mean)
+status.means <- matrix(c(means.without, means.with), nrow=2, ncol=1000)
+	#matrix(c(means.without, means.with), nrow=2) 
+		#works without ncol=1000
+trim.means.without <- apply(prost.data[,colnames(prost.data) == 1], 1, mean, trim = 0.1)
+trim.means.with <- apply(prost.data[,colnames(prost.data) == 2], 1, mean, trim = 0.1)
+status.trim.means <- matrix(c(trim.means.without, trim.means.with), nrow=2)
 
 
 # Back to the original dataset. We are interested in looking at the distribution
@@ -36,7 +42,10 @@ load('prostatedata.Rda')
 # cancer should be colored blue while patents with should be colored red. Set
 # the pch parameter to '.'.
 
-# your code here
+status <- factor(as.numeric(colnames(prost.data)))
+colour <- c("blue", "red")
+boxplot(prost.data, main="Patient's Gene Expression Levels", xlab="Patient", col=colour[status], pch='.')
+legend("topright", c("Without Prostate Cancer", "With Prostate Cancer"), fill=colour)
 
 # Suppose we want to remove any gene that has an unusually low expression level
 # across many patients. We'll define "unusually low" as below the quantile
@@ -63,7 +72,11 @@ load('prostatedata.Rda')
 
 quantileCutoff <- function(data, q.cutoff, max.low.expr) {
 
-    # your code here
+    low.cut <- quantile(data, q.cutoff)
+    low.cut.sum <- rowSums(data < low.cut)
+    low.expr.idcs <- which(low.cut.sum > max.low.expr)
+    return(low.expr.idcs)
+    
 }
 
 tryCatch(checkEquals(quantile.cutoff.t, quantileCutoff(test.data, 0.25, 10)),
@@ -91,6 +104,21 @@ tryCatch(checkEquals(quantile.cutoff.t, quantileCutoff(test.data, 0.25, 10)),
 tConvert <- function(gene) {
 
     # your code here
+    means <- by(gene, names(gene), mean)
+    st.devs <- by(gene, names(gene), sd)
+    lengths <- by(gene, names(gene), length)
+    
+    mean.1 <- means[[1]]
+    mean.2 <- means[[2]]
+    s.1 <- st.devs[[1]]
+    s.2 <- st.devs[[2]]
+    n.1 <- lengths[[1]]
+    n.2 <- lengths[[2]]
+    
+    s.12 <- sqrt(((n.1-1)*s.1^2 + (n.2-1)*s.2^2) / (length(gene)-2))
+    t.stat <- (mean.1 - mean.2) / (s.12 * sqrt(1/n.1 + 1/n.2))
+    return(t.stat)
+    
 }
 
 tryCatch(checkEquals(0.5889667, unname(tConvert(test.data[1, ])),
@@ -116,6 +144,10 @@ tryCatch(checkEquals(0.5889667, unname(tConvert(test.data[1, ])),
 pValConverter <- function(data) {
 
     # your code here
+    t.stats <- apply(data, 1, tConvert)
+    temp.pvals <- pt(abs(t.stats), df=100)
+    p.vals <- 2 * (1 - temp.pvals)
+    return(p.vals)
 }
 
 tryCatch(checkEquals(p.val.converter.t, pValConverter(test.data)),
@@ -132,6 +164,8 @@ tryCatch(checkEquals(p.val.converter.t, pValConverter(test.data)),
 # each bin.
 
 # your code here
+hist(pValConverter(prost.data), freq=FALSE, breaks=(1/0.05), main="Prostate Data p-values", xlab="p-values")
+abline(h=1)
 
 
 # You should notice that your histogram contains a spike for the lowest
@@ -157,7 +191,11 @@ tryCatch(checkEquals(p.val.converter.t, pValConverter(test.data)),
 
 FDR <- function(data, alpha) {
 
-    # your code here
+	# your code here
+	n.false <- alpha * nrow(data)
+    n.reject <- sum(pValConverter(data) < alpha)
+    fdr <- n.false / n.reject
+    return(fdr)
 }
 
 tryCatch(checkEquals(0.1923077, FDR(prost.data[1:500, ], 0.005), tolerance=1e-6),
