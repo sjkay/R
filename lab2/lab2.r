@@ -42,7 +42,7 @@ status.trim.means <- matrix(c(trim.means.without, trim.means.with), nrow=2, byro
 # cancer should be colored blue while patents with should be colored red. Set
 # the pch parameter to '.'.
 
-status <- factor(as.numeric(colnames(prost.data)))
+status <- factor(colnames(prost.data))
 colour <- c("blue", "red")
 boxplot(prost.data, main="Patient's Gene Expression Levels", xlab="Patient", col=colour[status], pch='.')
 legend("topright", c("Without Prostate Cancer", "With Prostate Cancer"), fill=colour)
