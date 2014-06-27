@@ -28,12 +28,12 @@ n.prostate <- sum(colnames(prost.data)==2)
 
 means.without <- apply(prost.data[,colnames(prost.data) == 1], 1, mean)
 means.with <- apply(prost.data[,colnames(prost.data) == 2], 1, mean)
-status.means <- matrix(c(means.without, means.with), nrow=2, ncol=1000)
+status.means <- matrix(c(means.without, means.with), nrow=2, ncol=1000, byrow=T)
 	#matrix(c(means.without, means.with), nrow=2) 
 		#works without ncol=1000
 trim.means.without <- apply(prost.data[,colnames(prost.data) == 1], 1, mean, trim = 0.1)
 trim.means.with <- apply(prost.data[,colnames(prost.data) == 2], 1, mean, trim = 0.1)
-status.trim.means <- matrix(c(trim.means.without, trim.means.with), nrow=2)
+status.trim.means <- matrix(c(trim.means.without, trim.means.with), nrow=2, byrow=T)
 
 
 # Back to the original dataset. We are interested in looking at the distribution
