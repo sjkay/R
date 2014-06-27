@@ -165,7 +165,7 @@ tryCatch(checkEquals(p.val.converter.t, pValConverter(test.data)),
 
 # your code here
 hist(pValConverter(prost.data), freq=FALSE, breaks=(1/0.05), main="Prostate Data p-values", xlab="p-values")
-abline(h=1)
+abline(h=1, col="red")
 
 
 # You should notice that your histogram contains a spike for the lowest
