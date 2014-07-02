@@ -22,7 +22,7 @@ readRemove <- function(file.name, max.na=0, sep=',', header=F) {
     data <- read.table(file.name, sep = sep, header = header)
     na.data <- is.na(data)
     row.na.data <- rowSums(na.data)
-    less.max <- row.na.data <=1
+    less.max <- row.na.data <=max.na
     new.data <- data[less.max, ]
     return(new.data)
 }
