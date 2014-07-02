@@ -36,6 +36,18 @@ load('ex4-tests.rda')
 identifyDuplicates <- function(data) {
 
     # your code here
+    #m <- sapply(1:length(data),function(x) unique(which(data[,x]==data,arr.ind=T)[,2]))
+    #sapply(1:length(data),function(x) which(data[,x]==data,arr.ind=T))
+    m <- matrix(sapply(1:length(data),function(x) unique(which(data[,x]==data,arr.ind=T)[,2])),ncol=length(data))
+    l <- sapply(1:length(data), function(x) m[,x]>x)
+    if (sum(l)==0) {
+    	return(numeric(0))
+    	} else {
+    list <- sapply(1:length(data), function(x) m[,x][l[,x]])
+    r <- sapply(1:length(data), function(x) rep(x,length(list[[x]])))
+    duplicate.pairs <- cbind(unlist(r),unlist(list))
+    return(duplicate.pairs)
+    }
 }
     
 tryCatch(checkEquals(numeric(0), identifyDuplicates(ex4.test1)),
