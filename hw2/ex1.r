@@ -19,7 +19,9 @@ load('ex1-tests.rda')
 
 outlierCutoff <- function(data) {
     # your code here
-    
+    IQR <- sapply(data, function(x) quantile(x,0.75)-quantile(x,0.25))
+    median <- sapply(data, median)
+    outlier.cutoffs <- rbind(median-1.5*IQR,median+1.5*IQR)
 }
 
 tryCatch(checkIdentical(outlier.cutoff.t, outlierCutoff(ex1.test)),
@@ -51,6 +53,12 @@ removeOutliers <- function(data, max.outlier.rate) {
     stopifnot(max.outlier.rate>=0 & max.outlier.rate<=1)
     
     # your code here
+    outlier.cutoffs <- outlierCutoff(data)
+    outlier.variables <- apply(data, 1, function(x) sum(x<outlier.cutoffs[1,]|x>outlier.cutoffs[2,]))
+    variables <- ncol(data)
+    outlier.rate <- outlier.variables/variables
+    subset.data <- data[!outlier.rate>max.outlier.rate,]
+    return(subset.data)
 }
 
 tryCatch(checkIdentical(remove.outlier.t, removeOutliers(ex1.test, 0.25)),
