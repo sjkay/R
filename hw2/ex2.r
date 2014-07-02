@@ -23,6 +23,12 @@ load('ex2-tests.rda')
 simpleNormSim <- function(means, sim.size=50, var=1) {
 
     # your code here
+    
+    norms <- rnorm(sim.size*length(means), rep(means, each=sim.size), sqrt(var))
+    simulation <- split(norms, rep(means, each=sim.size))
+    return(unname(simulation))
+    
+
 }
 
 set.seed(47)
@@ -55,6 +61,10 @@ advancedNormSim <- function(sim.sizes, means, vars) {
 
     stopifnot(all.equal(length(sim.sizes), length(means), length(vars)))
     # your code here
+    m <- matrix(c(means,sim.sizes,vars),nrow=3,byrow=T)
+    simulations <- sapply(1:length(means),function(x) simpleNormSim(m[1,x],m[2,x],m[3,x]))
+    return(simulations)
+    
 }   
 
 sizes.t <- c(25, 50, 25, 50)
