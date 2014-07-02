@@ -22,6 +22,7 @@ outlierCutoff <- function(data) {
     IQR <- sapply(data, function(x) quantile(x,0.75)-quantile(x,0.25))
     median <- sapply(data, median)
     outlier.cutoffs <- rbind(median-1.5*IQR,median+1.5*IQR)
+    return(outlier.cutoffs)
 }
 
 tryCatch(checkIdentical(outlier.cutoff.t, outlierCutoff(ex1.test)),
