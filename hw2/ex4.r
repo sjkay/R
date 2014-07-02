@@ -35,19 +35,26 @@ load('ex4-tests.rda')
 
 identifyDuplicates <- function(data) {
 
-    # your code here
-    #m <- sapply(1:length(data),function(x) unique(which(data[,x]==data,arr.ind=T)[,2]))
-    #sapply(1:length(data),function(x) which(data[,x]==data,arr.ind=T))
-    m <- matrix(sapply(1:length(data),function(x) unique(which(data[,x]==data,arr.ind=T)[,2])),ncol=length(data))
-    l <- sapply(1:length(data), function(x) m[,x]>x)
-    if (sum(l)==0) {
-    	return(numeric(0))
-    	} else {
-    list <- sapply(1:length(data), function(x) m[,x][l[,x]])
-    r <- sapply(1:length(data), function(x) rep(x,length(list[[x]])))
-    duplicate.pairs <- cbind(unlist(r),unlist(list))
-    return(duplicate.pairs)
-    }
+    # your code here (random way)
+    #m <- matrix(sapply(1:length(data),function(x) unique(which(data[,x]==data,arr.ind=T)[,2])),ncol=length(data))
+    #l <- sapply(1:length(data), function(x) m[,x]>x)
+    #if (sum(l)==0) {
+    #	return(numeric(0))
+    #	} else {
+    #list <- sapply(1:length(data), function(x) m[,x][l[,x]])
+    #r <- sapply(1:length(data), function(x) rep(x,length(list[[x]])))
+    #duplicate.pairs <- cbind(unlist(r),unlist(list))
+    #return(duplicate.pairs)
+    #}
+    
+    # your code here (using lower.tri)
+    mat <- sapply(data, function(x) sapply(data, function(y) identical(x,y)) )
+    mat[lower.tri(mat, diag = T)] = F 
+    dup <- which(mat, arr.ind = T)
+    if(nrow(dup) == 0) {
+    	return(numeric(0)) }					
+    else { duplicated.pairs <- dup[order(dup[,1]),]
+    	return(unname(duplicated.pairs)) }
 }
     
 tryCatch(checkEquals(numeric(0), identifyDuplicates(ex4.test1)),
