@@ -41,7 +41,11 @@ stratifiedTest <- function(data, group.variable, group.cutoff, test.alternative)
     stopifnot(group.variable %in% names(data)[2:6]) 
 
     # your code here
-    gp <- data[group.variable]
+    
+    #ttest <- by(data,data[,group.variable]>group.cutoff, function(group) t.test(group$bwt[group$smoke==1], group$bwt[group$smoke==0], alternative=test.alternative))
+    #t.outputs <- list(list(ttest[[1]]$statistic, ttest[[1]]$p.value), list(ttest[[2]]$statistic, ttest[[2]]$p.value))
+    
+    gp <- data[,group.variable]
     less.smoke <- data$bwt[which(gp<=group.cutoff & data$smoke==1)]
     less.nosmoke <- data$bwt[which(gp<=group.cutoff & data$smoke==0)]
     more.smoke <- data$bwt[which(gp>group.cutoff & data$smoke==1)]
