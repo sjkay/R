@@ -36,17 +36,38 @@ load('lab3-tests.rda')
 #   (black) and smokers (red). Do not worry about any other parameters for
 #   the plot.
 
-stratifiedTest <- function(data, group.variable, group.cutoff) {
+stratifiedTest <- function(data, group.variable, group.cutoff, test.alternative) {
 
     stopifnot(group.variable %in% names(data)[2:6]) 
 
     # your code here
+    gp <- data[group.variable]
+    less.smoke <- data$bwt[which(gp<=group.cutoff & data$smoke==1)]
+    less.nosmoke <- data$bwt[which(gp<=group.cutoff & data$smoke==0)]
+    more.smoke <- data$bwt[which(gp>group.cutoff & data$smoke==1)]
+    more.nosmoke <- data$bwt[which(gp>group.cutoff & data$smoke==0)]
+    t.less <- t.test(less.smoke,less.nosmoke, alternative=test.alternative)
+    t.more <- t.test(more.smoke,more.nosmoke, alternative=test.alternative)
+    
+    t.outputs <- list(
+    list(t.less$statistic, t.less$p.value),
+    list(t.more$statistic, t.more$p.value)
+    )
+    
+    par(mfrow=c(2,1))
+    plot(density(less.smoke), main="Below Cutoff", col="red")
+    lines(density(less.nosmoke))
+    
+    plot(density(more.smoke), main="Above Cutoff", col="red")
+    lines(density(more.nosmoke))
+    
+    return(t.outputs)
 }
 
-output.t1 <- stratifiedTest(babies.data, "height", 64)
+output.t1 <- stratifiedTest(babies.data, "height", 64, 'less')
 tryCatch(checkEquals(stratified.test.t1, unname(unlist(output.t1))),
          error=function(err) errMsg(err))
 
-output.t2 <- stratifiedTest(babies.data, "gestation", 280)
+output.t2 <- stratifiedTest(babies.data, "gestation", 280, 'less')
 tryCatch(checkEquals(stratified.test.t2, unname(unlist(output.t2))),
          error=function(err) errMsg(err))
