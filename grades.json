@@ -2,7 +2,39 @@
     "email": "sjk@berkeley.edu", 
     "github_name": "sjkay", 
     "grades": {
-        "assignment-1": {
+        "hw1": {
+            "earned": 28, 
+            "hash": "408fb2f54a1efb0786643dd30f843ead990980dc", 
+            "note": "", 
+            "parts": {
+                "ex1": {
+                    "earned": 4, 
+                    "possible": 6
+                }, 
+                "ex2": {
+                    "earned": 8, 
+                    "possible": 8
+                }, 
+                "ex3": {
+                    "earned": 8, 
+                    "possible": 8
+                }, 
+                "ex4": {
+                    "earned": 8, 
+                    "possible": 8
+                }
+            }, 
+            "penalty": 0, 
+            "possible": 30
+        }, 
+        "lab0": {
+            "earned": 10, 
+            "hash": "eac3abb9c45591f6f9eb378aa95bd49c0047bdff", 
+            "note": "", 
+            "penalty": 0, 
+            "possible": 10
+        }, 
+        "lab1": {
             "earned": 26, 
             "hash": "711418eb881d8bbf57330b03342d249face54a28", 
             "note": "", 
@@ -10,11 +42,21 @@
             "possible": 30
         }, 
         "lab2": {
-            "earned": 10, 
-            "hash": "eac3abb9c45591f6f9eb378aa95bd49c0047bdff", 
+            "earned": 30, 
+            "hash": "408fb2f54a1efb0786643dd30f843ead990980dc", 
             "note": "", 
+            "parts": {
+                "lab2": {
+                    "earned": 22, 
+                    "possible": 22
+                }, 
+                "lab2-figures": {
+                    "earned": 8, 
+                    "possible": 8
+                }
+            }, 
             "penalty": 0, 
-            "possible": 10
+            "possible": 30
         }
     }, 
     "login": "sjkay", 
