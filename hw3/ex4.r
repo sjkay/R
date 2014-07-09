@@ -20,6 +20,10 @@ load('ex4-tests.rda')
 # your x-axis to be 20, 100. You will need to read in the data to do this.
 
 # your code here *
+data<- read.csv("cancer.csv")
+plot(density(data$AGE[which(data$TRT==0)]), main="Patient age by group", xlab="age", xlim=c(20, 100))
+lines(density(data$AGE[which(data$TRT==1)]), col="red")
+
 
 # Produce four plots in the same window comparing the control and treatment
 # group oral conditions at each period (initial, 2wk, 4wk, 6wk). These
@@ -31,6 +35,17 @@ load('ex4-tests.rda')
 # NOTE: These plots wil look super wierd, don't worry about that.
 
 # your code here ***
+data<- read.csv("cancer.csv")
+par(mfrow=c(2,2))
+plot(density(data$TOTALCIN[which(data$TRT==0)]), main="initial", ylab="condition", xlim=c(1, 20), ylim=c(0,0.6))
+lines(density(data$TOTALCIN[which(data$TRT==1)]), col="red")
+plot(density(data$TOTALCW2[which(data$TRT==0)]), main="2wk", ylab="condition", xlim=c(1, 20), ylim=c(0,0.6))
+lines(density(data$TOTALCW2[which(data$TRT==1)]), col="red")
+plot(density(data$TOTALCW4[which(data$TRT==0)]), main="4wk", ylab="condition", xlim=c(1, 20), ylim=c(0,0.6))
+lines(density(data$TOTALCW4[which(data$TRT==1)]), col="red")
+plot(density(data$TOTALCW6[which(data$TRT==0)]), main="6wk", ylab="condition", xlim=c(1, 20), ylim=c(0,0.6))
+lines(density(data$TOTALCW6[which(data$TRT==1)]), col="red")
+
 
 
 # Load in the "babies.csv" dataset for this problem. Implement the function
@@ -58,6 +73,9 @@ testGroupsGestation <- function(data, group1.idcs, group2.idcs,
     stopifnot(!any(group1.idcs %in% group2.idcs))
 
     # your code here **
+    data<- read.csv("babies.csv")
+    
+    
 }
 
 tryCatch(checkEquals(test.groups.gestation.t,
