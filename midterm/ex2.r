@@ -128,7 +128,7 @@ tryCatch(checkEquals(!os, odd(xs, flip=TRUE)),
 
 sum.adm = function(x, na.rm=FALSE){
     # your code here
-    sapply(x, function(x) sum(abs(x-median(x))))
+    sum(abs(x-median(x,na.rm=na.rm)),na.rm=na.rm)
 }
 
 x = 1:3
