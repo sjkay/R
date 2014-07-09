@@ -73,8 +73,11 @@ testGroupsGestation <- function(data, group1.idcs, group2.idcs,
     stopifnot(!any(group1.idcs %in% group2.idcs))
 
     # your code here **
-    data<- read.csv("babies.csv")
-    
+    group1<-data$gestation[group1.idcs]
+    group2<-data$gestation[group2.idcs]
+    t.test.output <- t.test(group1, group2, alternative=test.alternative)
+    return(t.test.output)
+
     
 }
 
@@ -88,7 +91,8 @@ tryCatch(checkEquals(test.groups.gestation.t,
 # variable as <smoking.test>
 
 # your code here *
-#smoke.idcs <- your code here
-#non.smoke.idcs <- your code here
-#smoking.test <- your code here
+data<- read.csv("babies.csv")
+smoke.idcs <- which(data$smoke==1)
+non.smoke.idcs <- which(data$smoke==0)
+smoking.test <- testGroupsGestation(data, smoke.idcs, non.smoke.idcs,test.alternative='less')
 
