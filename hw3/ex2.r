@@ -16,6 +16,8 @@ load('ex2-tests.rda')
 colSorter <- function(data.matrix) {
 
     # your code here **
+    sorted.matrix <- data.matrix[order(data.matrix[,1],data.matrix[,2],decreasing=F),]
+    return(sorted.matrix)
 }
 
 tryCatch(checkEquals(col.sorter.t, colSorter(ex2.test1)),
@@ -37,6 +39,9 @@ tryCatch(checkEquals(col.sorter.t, colSorter(ex2.test1)),
 rowSorter <- function(data.matrix) {
 
     # your code here **
+    sorted.matrix <- t(apply(data.matrix,1,function(x) sort(x,decreasing=T)))
+    return(sorted.matrix)
+    
 }
 
 tryCatch(checkEquals(row.sorter.t, rowSorter(ex2.test2)),
@@ -61,6 +66,9 @@ tryCatch(checkEquals(row.sorter.t, rowSorter(ex2.test2)),
 factorSorter <- function(data, sort.name) {
 
     # your code here ***
+    factor.variable <- data[,sapply(data, function(var) class(var)=='factor')]
+    sorted.factors <- by(data,factor.variable, function(var) var[order(var[,sort.name],decreasing=F),])
+    return(sorted.factors)
 }
 
 tryCatch(checkEquals(factor.sorter.t, factorSorter(iris, 'Sepal.Length')),
