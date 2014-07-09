@@ -44,7 +44,7 @@ tryCatch(checkEquals(sum.na.t, sumNA(ex3.test1)), error=function(err)
 simulateNormals <- function(n, sim.mean=0, sim.var=1, k=10) {
 
     # your code here *
-    simulations <- matrix(sapply(sim.mean, rnorm, n=n*k, sd=sqrt(sim.var)),ncol=k)
+    simulations <- replicate(k, rnorm(n, sim.mean, sqrt(sim.var)))
     return(simulations)
 
 }
