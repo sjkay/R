@@ -66,8 +66,8 @@ tryCatch(checkEquals(row.sorter.t, rowSorter(ex2.test2)),
 factorSorter <- function(data, sort.name) {
 
     # your code here ***
-    factor.variable <- sapply(data, function(var) class(var)=='factor')
-    sorted.factors <- by(data,data[,factor.variable], function(var) var[order(var[,sort.name],decreasing=F),])
+    factor.variable <- data[,sapply(data, function(var) class(var)=='factor')]
+    sorted.factors <- by(data,factor.variable, function(var) var[order(var[,sort.name],decreasing=F),])
     return(sorted.factors)
 }
 
