@@ -17,6 +17,9 @@ load('ex5-tests.rda')
 firstLast <- function(data) {
 
     # your code here *
+    first.last <- data[c(1:5,(nrow(data)-4):nrow(data)),]
+    return(first.last)
+    
 }
 
 tryCatch(checkEquals(first.last.t, firstLast(iris)), error=function(err)
@@ -36,6 +39,8 @@ tryCatch(checkEquals(first.last.t, firstLast(iris)), error=function(err)
 npRatio <- function(data) {
 
     # your code here *
+    np.ratio<- ncol(data)/nrow(data)
+    return(np.ratio)
 }
 
 tryCatch(checkEquals(np.ratio.t, npRatio(iris)), error=function(err)
@@ -55,6 +60,10 @@ tryCatch(checkEquals(np.ratio.t, npRatio(iris)), error=function(err)
 numericSummary <- function(data) {
 
     # your code here **
+    n.numeric <- sum(sapply(data, function(var) class(var)=='numeric'))
+    sub<- data[,sapply(data, function(var) class(var)=='numeric')]
+    numeric.summary<- apply(sub,2,summary)
+    return(numeric.summary)
 }
 
 tryCatch(checkEquals(numeric.summary.t, unname(numericSummary(ex5.test1))),
@@ -73,6 +82,8 @@ tryCatch(checkEquals(numeric.summary.t, unname(numericSummary(ex5.test1))),
 getClass <- function(data) {
 
     # your code here *
+    var.classes <- sapply(data, class)
+    return(var.classes)
 }
 
 tryCatch(checkEquals(get.class.t, unname(getClass(ex5.test1))), error=function(err)
