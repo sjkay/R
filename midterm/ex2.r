@@ -11,6 +11,9 @@ errMsg <- function(err) print(err)
 
 num.factors = function(d) {
     # your code here
+    #factor.variable <- data[,sapply(data, function(var) class(var)=='factor')]
+    num.fac <- sum(sapply(d, function(var) class(var)=='factor'))
+    return(num.fac)
 }
 
 first = data.frame(x=rnorm(10), y=as.factor(1:10))
@@ -33,6 +36,9 @@ tryCatch(checkEquals(2, num.factors(second)),
 
 num.factors2 = function(l) {
     # your code here
+    num.lfac <- sum(sapply(l, num.factors))
+    return(num.lfac)
+    
 }
 
 list1 = list(first, second)
@@ -59,6 +65,11 @@ tryCatch(checkEquals(4, num.factors2(list2)),
 
 sum.or.product = function(x, y=10) {
     # your code here
+    if (x>y) {
+    	return(x+y)
+    	} else {
+    		return(x*y)
+    		}
 }
 
 x=1:10
@@ -88,6 +99,11 @@ tryCatch(checkEquals(x+y, sum.or.product(x,y)),
 
 odd = function(x, flip=FALSE) {
     # your code here
+    if (flip==FALSE) {
+    	return(!((x%% 2) == 0))
+    	} else {
+    		return((x%% 2) == 0)
+    		}
 }
 
 xs = c(rep(1,5),rep(2,5))
@@ -112,6 +128,7 @@ tryCatch(checkEquals(!os, odd(xs, flip=TRUE)),
 
 sum.adm = function(x, na.rm=FALSE){
     # your code here
+    sapply(x, function(x) sum(abs(x-median(x))))
 }
 
 x = 1:3
