@@ -44,7 +44,7 @@ tryCatch(checkEquals(sum.na.t, sumNA(ex3.test1)), error=function(err)
 simulateNormals <- function(n, sim.mean=0, sim.var=1, k=10) {
 
     # your code here *
-    simulations <- matrix(sapply(sim.mean, rnorm, n=n*k, sd=sqrt(sim.var)),ncol=k)
+    simulations <- replicate(k, rnorm(n, sim.mean, sqrt(sim.var)))
     return(simulations)
 
 }
@@ -89,7 +89,7 @@ tryCatch(checkEquals(list.lengths.t, listLengths(ex3.test2)),
 matrixListMeans <- function(matrix.list) {
 
     # your code here *
-    matrix.row.means <- sapply(data.matrix, rowMeans)
+    matrix.row.means <- sapply(matrix.list, rowMeans)
     return(matrix.row.means)
 }
 
@@ -116,14 +116,9 @@ tryCatch(checkEquals(matrix.list.means.t, matrixListMeans(ex3.test3)),
 standMatrixVariables <- function(data.matrix) {
 
     # your code here ***
-    #apply(data.matrix,2,function(i,j) (mean(data.matrix[,j]) - mean(data.matrix[,i])) /sd(data.matrix[,c(i,j)]))
-    #apply(data.matrix,2, function(i,j) (mean(i) - mean(j)) /sd(c(i,j)))
-    fun <- function(i,j) (mean(data.matrix[,j]) - mean(data.matrix[,i])) /sd(data.matrix[,c(i,j)])
-    rows <- 1:ncol(data.matrix)
-    cols <- 1:ncol(data.matrix)
-    standardized.matrix <- outer(rows,cols,FUN=fun)
-    #(mean(data.matrix[,4]) - mean(data.matrix[,5])) /sd(data.matrix[,c(5,4)])
+    standardized.matrix <- apply(data.matrix, 2, function(col.i) {apply(data.matrix, 2, function(col.j) {(mean(col.i) - mean(col.j)) / sd(c(col.i, col.j))})})
     return(standardized.matrix)
+
 }
 
 tryCatch(checkEquals(stand.matrix.variables.t,
