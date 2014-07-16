@@ -140,6 +140,7 @@ bAGen <- function(lambda, kappa, max.gen) {
     # distribution with rate <kappa>
 
     # your code here
+    generation.list[[1]] <- data.frame(parent.id=0, child.id=0, birth.date=0, assassination.date=rexp(1, kappa))
 
     # Simulate the birth assassination process using your "nextGeneration"
     # function for up to <max.gen> generations. If the family dies out
@@ -148,6 +149,10 @@ bAGen <- function(lambda, kappa, max.gen) {
 
       
     # your code here
+    for(gen in 2:max.gen) {
+      generation.list[[gen]] <- nextGeneration(lambda, kappa, generation.list[[gen-1]])
+    if(is.null(generation.list[[gen]])) break
+    }
 
 
     # This removes extra list elements if the family died out. You do not
@@ -161,9 +166,9 @@ bAGen <- function(lambda, kappa, max.gen) {
 # 0.2 for <sim.1>, <sim.2>, and <sim.3> respectively
 
 set.seed(47)
-# sim.1 <- your code here
-# sim.2 <- your code here
-# sim.3 <- your code here
+sim.1 <- replicate(1000, bAGen(0.1, 0.75, 10))
+sim.2 <- replicate(1000, bAGen(0.1, 0.5, 10))
+sim.3 <- replicate(1000, bAGen(0.1, 0.2, 10))
 
 
 # Implement the function gensSurvived. Your function should take the
@@ -182,7 +187,8 @@ set.seed(47)
 gensSurvived <- function(bagen.simulation) {
 
     # your code here
-
+    generations <- unlist(lapply(bagen.simulation, length))
+    return(generations)
 }
 
 # Use your gensSurvived function to create the following plot:
@@ -194,3 +200,7 @@ gensSurvived <- function(bagen.simulation) {
 # title should be "B-A Simulation". The x-axis should range from 0 to 11.
 
 # your code here
+plot(density(gensSurvived(sim.1), bw=0.35), xlab="generations survived", main="B-A Simulation", xlim=c(0,11), col="red")
+lines(density(gensSurvived(sim.2), bw=0.35), col="green")
+lines(density(gensSurvived(sim.3), bw=0.35), col="blue")
+legend("topright", c("sim.1", "sim.2", "sim.3"), fill=c("red", "green", "blue"))
