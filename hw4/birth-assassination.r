@@ -45,9 +45,9 @@ generateKids <- function(lambda, kappa, parent) {
     # whose rate is proportional to the length of <parent>'s life
 
     # your code here
-    # n.kids <- your code here
+    n.kids <- rpois(1, lambda*(parent$assassination.date-parent$birth.date))
     
-    if (n.kids) {
+    if (!n.kids==0) {
 
         # If any n.kids is non-zero, generate the dataframe <kids> containing
         # the necessary variables for each child. To do this, you will need to
@@ -57,9 +57,11 @@ generateKids <- function(lambda, kappa, parent) {
         # <life.lengths>: a random numeric vector indicating the length of
         # each child's life
 
-        # kid.birthdays <- your code here
-        # life.lengths <- your code here
+        kid.birthdays <- runif(n.kids, min=parent$birth.date, max=parent$assassination.date)
+        life.lengths <- parent$assassination.date-kid.birthdays + rexp(n.kids, kappa)
         # your code here
+        kids<- data.frame(parent[,2], 1:n.kids, kid.birthdays, kid.birthdays+life.lengths)
+        colnames(kids) <- colnames(parent)
 
         return(kids)
     } else return(NULL) #return null if <parent> has no kids
@@ -96,7 +98,7 @@ nextGeneration <- function(lambda, kappa, parents) {
     # <parents>. Each element of this list should be a dataframe of the
     # kids born to the corresponding parent. Call this list <next.gen>
 
-    #next.gen <- your code here
+    next.gen <- lapply(1:nrow(parents), function(row) generateKids(lambda, kappa, parents[row,]))
 
 
     # The following code removes any list element that has no entries
@@ -110,7 +112,9 @@ nextGeneration <- function(lambda, kappa, parents) {
     # ranges from 1 to nrow(next.gen)
 
     # your code here
-    
+    if(!is.null(next.gen)) {
+    next.gen[,"child.id"] <- 1:nrow(next.gen)
+    }
     return(next.gen)
 }
 
