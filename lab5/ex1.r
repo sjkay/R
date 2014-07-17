@@ -87,12 +87,14 @@ evalClusters <- function(data, true.labels, norm='euclidean', k) {
     #sum(vec==a) / sum(cL==a)
     #})
     
-    group.table = table(cL, true.labels)
-    return(unname(apply(group.table, 1, max)/rowSums(group.table)))
+    #group.table = table(cL, true.labels)
+    #return(unname(apply(group.table, 1, max)/rowSums(group.table)))
     
-    #frequent.groups <- by(true.labels, cL, function(cluster) {
-    #	names(which.max(table(cluster)))
-    #})
+    proportion <- by(true.labels, cL, function(cluster) {
+    	max.group <- names(which.max(table(cluster)))
+    	sum(cluster==max.group)/length(cluster)
+    })
+    return(as.vector(proportion))
 
 }
 
