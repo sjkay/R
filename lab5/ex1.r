@@ -19,10 +19,12 @@ load('ex1-tests.rda')
 dataDist <- function(data, norm='euclidean') {
 
     # your code here
+    num.data <- data[,sapply(data, function(var) class(var)=='numeric')]
+	return(dist(num.data, method=norm))
 
 }
 
-tryCatch(checkEquals(data.dist.t, dataDist(iris)), error=function(err)
+tryCatch(checkEquals(c(data.dist.t), c(dataDist(iris))), error=function(err)
          errMsg(err))
 
 
@@ -45,6 +47,8 @@ tryCatch(checkEquals(data.dist.t, dataDist(iris)), error=function(err)
 clustLabel <- function(data, norm='euclidean', k) {
 
     # your code here
+    hc <- hclust(dataDist(data, norm=norm))
+    return(cutree(hc, k = k))
 
 }
 
@@ -75,6 +79,20 @@ tryCatch(checkEquals(clust.label.t, clustLabel(iris, k=3)),
 evalClusters <- function(data, true.labels, norm='euclidean', k) {
 
     # your code here
+    cL <- clustLabel(data, norm=norm, k=k)
+    
+    #sapply(1:k, function(x) {
+    #vec <- cL[as.numeric(true.labels)==x]
+    #a <- names(which.max(table(vec)))
+    #sum(vec==a) / sum(cL==a)
+    #})
+    
+    group.table = table(cL, true.labels)
+    return(unname(apply(group.table, 1, max)/rowSums(group.table)))
+    
+    #frequent.groups <- by(true.labels, cL, function(cluster) {
+    #	names(which.max(table(cluster)))
+    #})
 
 }
 
@@ -102,7 +120,15 @@ tryCatch(checkEquals(eval.clusters.t, evalClusters(iris, iris$Species, k=3)),
 heightCluster <- function(data, norm='euclidean', h, ...) {
     
     # your code here
-
+    cL <- clustLabel(data, norm=norm, k=h)
+	plot(cL, ...)
+	
+	
+	hc <- hclust(dataDist(data, norm=norm))
+    cL <- cutree(hc, h = h)
+    plot(hc, ...)
+    abline(h=h, col='red')
+    return(cL)
 }
 
 tryCatch(checkEquals(height.cluster.t, heightCluster(iris, h=4, cex=0.2)),
