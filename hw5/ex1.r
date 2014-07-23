@@ -16,7 +16,8 @@ load('ex1-tests.rda')
 sigComponents <- function(pca, var.level) {
 
     # your code here
-
+    above.var.level <- sum(var.level < pca$sdev^2)
+    return(above.var.level)
     
 }
 
@@ -37,6 +38,11 @@ tryCatch(checkEquals(2, sigComponents(iris.pca, 0.9)), error=function(err)
 varProportion <- function(pca) {
 
     # your code here
+    #cum.prop <- summary(pca)$importance[3,]
+    #return(unname(cum.prop))
+    
+    cum.prop <- cumsum(pca$sdev^2)/sum(pca$sdev^2)
+    return(cum.prop)
 
 }
 
@@ -66,6 +72,14 @@ tryCatch(checkEquals(var.proportion.t, varProportion(iris.pca)),
 reduceData <- function(data, var.level, scale=T, center=T) {
 
     # your code here
+    pca <- prcomp(data, scale=scale, center=center)
+    n <- sum(pca$sdev^2 > var.level)
+    if (!n==0) {
+    new <- pca$x[,1:n]
+    } else {
+    new <- integer(0)
+    }
+    return(new)
 
 }
 
@@ -96,13 +110,18 @@ tryCatch(checkEquals(reduce.data.t, reduceData(iris.data, 0.9)),
 #   dendrogram. Cut the tree so that you have 3 clusters and store the
 #   resulting cluster labels as the variable <cluster.labels.h>
 
+wines <- read.csv('wines.csv')
 
-# wine.reduced <- your code here
+wine.reduced <- reduceData(wines, 1)
+set.seed(47)
+cluster.labels.k <- kmeans(wine.reduced,3, iter.max=10)$cluster
 
-# cluster.labels.k <- your code here, set seed to 47 before running the
 # algorithm
 
-# cluster.labels.h <- your code here
+hc <- hclust(dist(wine.reduced))
+plot(hc)
+abline(h=8.5)
+cluster.labels.h <- cutree(hc,h=8.5)
 
 
 
@@ -127,10 +146,15 @@ tryCatch(checkEquals(reduce.data.t, reduceData(iris.data, 0.9)),
 #should run the command "stop", printing the error messages:
 # "len variables > 2" and "incompatible dimensions" respectively.
 
+library(RColorBrewer)
 
 plotClusters <- function(data, variables, cluster.labels, ...) {
     
     # your code here
+    if(length(variables)>2) stop("len variables > 2")
+    if(!length(cluster.labels)==nrow(data)) stop("incompatible dimensions")
+    
+    plot(data[,variables],col=brewer.pal(max(cluster.labels),"Set1")[cluster.labels], ...)
 
 }
 
@@ -151,4 +175,15 @@ tryCatch(checkException(plotClusters(iris.data, 1:3, 1:nrow(iris.data)),
 # variables but color the points by the hierarchical clustering labels and
 # the true labels (from col 1 of wines.csv) respectively. Change the titles
 # of each of these rows accordingly but keep the pch as 20.
+
+par(mfrow=c(3,3))
+plotClusters(wine.reduced, 1:2, cluster.labels.k, main="k-means", pch=20)
+plotClusters(wine.reduced, 2:3, cluster.labels.k, main="k-means", pch=20)
+plotClusters(wine.reduced, c(1,3), cluster.labels.k, main="k-means", pch=20)
+plotClusters(wine.reduced, 1:2, cluster.labels.h, main="hclust", pch=20)
+plotClusters(wine.reduced, 2:3, cluster.labels.h, main="hclust", pch=20)
+plotClusters(wine.reduced, c(1,3), cluster.labels.h, main="hclust", pch=20)
+plotClusters(wine.reduced, 1:2, wines[,1], main="true labels", pch=20)
+plotClusters(wine.reduced, 2:3, wines[,1], main="true labels", pch=20)
+plotClusters(wine.reduced, c(1,3), wines[,1], main="true labels", pch=20)
 
