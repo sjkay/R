@@ -119,7 +119,7 @@ cluster.labels.k <- kmeans(wine.reduced,3, iter.max=10)$cluster
 # algorithm
 
 hc <- hclust(dist(wine.reduced))
-plot(hc)
+plot(hc, cex=0.2)
 abline(h=8.5)
 cluster.labels.h <- cutree(hc,h=8.5)
 
@@ -187,3 +187,7 @@ plotClusters(wine.reduced, 1:2, wines[,1], main="true labels", pch=20)
 plotClusters(wine.reduced, 2:3, wines[,1], main="true labels", pch=20)
 plotClusters(wine.reduced, c(1,3), wines[,1], main="true labels", pch=20)
 
+#v=list(1:2, 2:3, c(1,3))
+#sapply(v, function(v) plotClusters(wine.reduced, v, cluster.labels.k, main="k-means", pch=20))
+#sapply(v, function(v) plotClusters(wine.reduced, v, cluster.labels.h, main="hclust", pch=20))
+#sapply(v, function(v) plotClusters(wine.reduced, v, wines[,1], main="true labels", pch=20))
