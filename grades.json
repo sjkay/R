@@ -138,6 +138,23 @@
             }, 
             "penalty": 0, 
             "possible": 30
+        }, 
+        "lab4": {
+            "earned": 30, 
+            "hash": "2afdc2e4a70f60a915cef90020308c2fcf9c8bf4", 
+            "note": "", 
+            "parts": {
+                "ex1": {
+                    "earned": 20, 
+                    "possible": 20
+                }, 
+                "ex1_fig": {
+                    "earned": 10, 
+                    "possible": 10
+                }
+            }, 
+            "penalty": 0, 
+            "possible": 30
         }
     }, 
     "login": "sjkay", 
