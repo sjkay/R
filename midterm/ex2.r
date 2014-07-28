@@ -65,7 +65,7 @@ tryCatch(checkEquals(4, num.factors2(list2)),
 
 sum.or.product = function(x, y=10) {
     # your code here
-    if (x>y) {
+    if (all(x>y)) {
     	return(x+y)
     	} else {
     		return(x*y)
