@@ -172,6 +172,23 @@
             }, 
             "penalty": 0, 
             "possible": 30
+        }, 
+        "lab5": {
+            "earned": 30, 
+            "hash": "b88b065ef24d60c69121795b08cd2aa97530db5e", 
+            "note": "", 
+            "parts": {
+                "ex1": {
+                    "earned": 24, 
+                    "possible": 24
+                }, 
+                "ex1_fig": {
+                    "earned": 6, 
+                    "possible": 6
+                }
+            }, 
+            "penalty": 0, 
+            "possible": 30
         }
     }, 
     "login": "sjkay", 
