@@ -189,6 +189,35 @@
             }, 
             "penalty": 0, 
             "possible": 30
+        }, 
+        "midterm": {
+            "earned": 26, 
+            "hash": "d32fad0f916919073b676fe40eb7e644baa9089d", 
+            "note": "", 
+            "parts": {
+                "ex1": {
+                    "earned": 4, 
+                    "possible": 4
+                }, 
+                "ex1_fig": {
+                    "earned": 5, 
+                    "possible": 5
+                }, 
+                "ex2": {
+                    "earned": 17, 
+                    "possible": 18
+                }, 
+                "extra_credit": {
+                    "earned": 0, 
+                    "possible": 2
+                }, 
+                "extra_credit_fig": {
+                    "earned": 0, 
+                    "possible": 1
+                }
+            }, 
+            "penalty": 0, 
+            "possible": 30
         }
     }, 
     "login": "sjkay", 
