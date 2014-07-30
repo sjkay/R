@@ -230,6 +230,6 @@ min.fpr.rf <- constrainedFPR(rf.output$tprs, rf.output$fprs, 0.95)
 
 grid <- seq(0,1, by=0.01)
 
-rp.threshold <- constrainedFPR(rp.output$tprs, rp.output$fprs, 0.95)
-rf.threshold <- constrainedFPR(rf.output$tprs, rf.output$fprs, 0.95)
+rp.threshold <- grid[rp.output$fprs==min.fpr.rp]
+rf.threshold <- grid[rf.output$fprs==min.fpr.rf]
  
