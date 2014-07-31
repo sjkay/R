@@ -159,13 +159,35 @@ spam$test <- spam$data[-samp,]
 # parameters.  *** Make sure to set your seed to 47 before fitting your
 # models***
 
-set.seed(47)
-model.rp <- rpart(spam~., method="class", data=spam$train)
-pred.rp <- predict(model.rp, spam$test, type="prob")[,2]
+#set.seed(47)
+#model.rp <- rpart(spam~., method="class", data=spam$train)
+#pred.rp <- predict(model.rp, spam$test, type="prob")[,2]
 
+#set.seed(47)
+#model.rf = randomForest(spam~., data=spam$train, ntree=250)
+#pred.rf <- predict(model.rf, spam$test, type="prob")[,2]
+
+#############
 set.seed(47)
-model.rf = randomForest(spam~., data=spam$train, ntree=250)
-pred.rf <- predict(model.rf, spam$test, type="prob")[,2]
+
+spam$train.mat <- as.matrix(spam$train)
+spam$train.x <- spam$train.mat[,-ncol(spam$train.mat)]
+spam$train.y <- spam$train$spam
+
+spam$test.mat <- as.matrix(spam$test)
+spam$test.x <- spam$test.mat[,-ncol(spam$test.mat)]
+spam$test.y <- as.factor(spam$test$spam)
+
+model.rpart = rpart(spam ~., method="class", data=spam$train)  
+prediction1 = predict(model.rpart, spam$test, type="prob")
+pred.rp = prediction1[,2]
+  
+model.rf = randomForest(x=spam$train.x, y=spam$train.y, ntree=250)
+prediction2 = predict(model.rf, spam$test, type="prob")
+pred.rf = prediction2[,2]
+
+
+###############
 
 # Evaluate your two models using your plotROC function. Store the outputs as
 # <rp.output> and <rf.output> respectively. Please plot the ROC curves in the
