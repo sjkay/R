@@ -17,6 +17,13 @@ load('lab7-tests.rda')
 dataGenerator <- function(X, betas, var) {
 
     # your code here
+    X <- as.matrix(X)
+    if(ncol(X) != length(betas)) stop("length betas does not match p")
+    
+    n <- nrow(X)
+    epsilon <- rnorm(n, 0, sqrt(var))
+    Y <- X %*% betas + epsilon
+    return(Y)
 
 }
 
@@ -39,6 +46,10 @@ tryCatch(checkEquals(lab7$dataGenerator.t, dataGenerator(lab7$predictors, 4, 4))
 betaEstimator <- function(X, betas, var) {
 
     # your code here
+    Y <- dataGenerator(X, betas, var)
+    fit <- lm(Y~X)
+    coefs <- fit$coefficients[2:length(fit$coefficients)]
+    return(coefs)
 
 }
 
@@ -61,6 +72,7 @@ tryCatch(checkEquals(lab7$betaEstimator.t, betaEstimator(lab7$predictors, 4, 4))
 betaVariance <- function(X, var) {
 
     # your code here
+    return(c(solve(t(X) %*% X) * var))
 
 }
 
@@ -76,6 +88,21 @@ tryCatch(checkEquals(lab7$betaVariance.t, betaVariance(lab7$predictors, 4)),
 # of beta.hats that are within 2 sd of beta over your 1000 simulations. Store
 # this value as prop.2sd.
 # ***make sure to set your seed to 47 before running your simulations***
+
+set.seed(47)
+n <- 100
+n.sims <- 1000
+beta <- 3
+var <- 2
+
+X <- rnorm(n)
+beta.hats <- replicate(n.sims, betaEstimator(X, beta, var))
+beta.var <- betaVariance(X, var)
+beta.2sd <- 2*sqrt(beta.var)
+prop.2sd <- sum(beta.hats <= beta+beta.2sd & beta.hats >= beta-beta.2sd) / n.sims
+
+hist(beta.hats, freq=F)
+lines(seq(2, 4, 0.01), dnorm(seq(2,4,0.01), beta, sqrt(beta.var)), col='red')
 
 # beta.hats <- your code here
 # prop.2sd <- your code here
