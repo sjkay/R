@@ -223,5 +223,6 @@
     "login": "sjkay", 
     "name": "Sung Jun Kim", 
     "status": "enrolled", 
-    "url": "git@github.com:sjkay/stat133.git"
+    "url": "git@github.com:sjkay/stat133.git", 
+    "type": "students"
 }
