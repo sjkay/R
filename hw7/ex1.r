@@ -13,7 +13,7 @@ father.son <- read.csv("father-son.csv")
 ## fathers' heights (x-axis). Use pch = 20 in your call to plot.
 
 fs.scatterplot <- function() {
-    plot(father.son, pch=20)
+    plot(father.son, main='scatterplot of sons heights vs fathers heights', pch=20)
     #plot(sheight~fheight, data=father.son, pch=20)
 }
 
@@ -47,7 +47,7 @@ test(unname(fs.predict(fs.lm, 70)), 69.8731, tolerance = 0.0001)
 
 ## Plot the residuals versus the fitted values with a horizontal
 ## line at 0. Do the residuals look independent and normally
-## distributed?
+## distributed? yes
 
 plot.residuals <- function() {
     plot(fitted(fs.lm), resid(fs.lm), main='residuals versus the fitted values')
