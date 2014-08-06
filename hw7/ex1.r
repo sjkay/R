@@ -13,7 +13,7 @@ father.son <- read.csv("father-son.csv")
 ## fathers' heights (x-axis). Use pch = 20 in your call to plot.
 
 fs.scatterplot <- function() {
-    YOUR.CODE.HERE
+    plot(father.son, pch=20)
 }
 
 fs.scatterplot()
@@ -21,8 +21,8 @@ fs.scatterplot()
 ## Fit a linear model (see "lm") to the data, and call this "fs.lm".
 ## What are the coefficients? Save this in a variable named "fs.coef"
 
-(fs.lm <- YOUR.CODE.HERE)
-(fs.coef <- YOUR.CODE.HERE)
+fs.lm <- lm(rev(father.son))
+fs.coef <- fs.lm$coefficients
 
 ## Write a function "fs.predict" that takes a fitted "lm" object and a
 ## vector of father heights and outputs the predicted heights of their
@@ -36,7 +36,7 @@ fs.scatterplot()
 ## Hint: Look up "predict.lm"
 
 fs.predict <- function(fs.lm, new.fheight) {
-    YOUR.CODE.HERE
+    predict.lm(fs.lm, data.frame(fheight=new.fheight))
 }
 
 test(unname(fs.predict(fs.lm, 70)), 69.8731, tolerance = 0.0001)
@@ -46,7 +46,7 @@ test(unname(fs.predict(fs.lm, 70)), 69.8731, tolerance = 0.0001)
 ## distributed?
 
 plot.residuals <- function() {
-    YOUR.CODE.HERE
+    plot(fitted(fs.lm), resid(fs.lm))
 }
 
 plot.residuals()
@@ -65,7 +65,7 @@ plot.residuals()
 ## Save the confidence interval as a vector of length 2 named
 ## fheight.slope.confidence.interval
 
-fheight.slope.confidence.interval <- YOUR.CODE.HERE
+fheight.slope.confidence.interval <- confint(fs.lm)[2,]
 
 ## There are two types of intervals we may be interested in when doing
 ## linear modeling. One interval, called the "confidence interval" or
@@ -91,7 +91,10 @@ fheight.slope.confidence.interval <- YOUR.CODE.HERE
 ## Hint look at the helm for "predict" or "predict.lm"
 
 fs.confidence <- function(fs.lm, new.fheight) {
-    YOUR.CODE.HERE
+    
+    pred <- predict.lm(fs.lm, data.frame(fheight=new.fheight), interval="confidence")
+    return(pred[,-1])
+    
 }
 
 test(unname(fs.confidence(fs.lm, 70)), c(69.68266380, 70.06357032))
@@ -103,7 +106,13 @@ test(unname(fs.confidence(fs.lm, 70)), c(69.68266380, 70.06357032))
 ## 2 lines for the lower and upper 95% prediction interval - in blue
 
 plot.bands <- function() {
-    YOUR.CODE.HERE
+    abline(fs.lm, col="red")
+    pred1 <- fs.confidence(fs.lm, father.son[,1])
+    lines(father.son[match(sort(pred1[,1]), pred1[,1]),1], sort(pred1[,1]), col="green")
+    lines(father.son[match(sort(pred1[,2]), pred1[,2]),1], sort(pred1[,2]), col="green")
+    pred2 <- predict.lm(fs.lm, data.frame(fheight=father.son[,1]), interval="prediction")
+    lines(father.son[match(sort(pred2[,2]), pred2[,2]),1], sort(pred2[,2]), col="blue")
+    lines(father.son[match(sort(pred2[,3]), pred2[,3]),1], sort(pred2[,3]), col="blue")
 }
 
 plot.bands()
@@ -123,10 +132,10 @@ plot.bands()
 ## value).
 
 r.squared <- function(y, y.fitted) {
-    YOUR.CODE.HERE
+    return((1-(sum(y-y.fitted))^2)/sum((y-mean(y))^2))
 }
 
 ## What is the r.squared of our linear model on the father-son data?
 ## Save this in a variable named "fs.rsquared"
 
-(fs.rsquared <- YOUR.CODE.HERE)
+fs.rsquared <- r.squared(father.son$sheight, fitted(fs.lm))
