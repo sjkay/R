@@ -14,6 +14,7 @@ father.son <- read.csv("father-son.csv")
 
 fs.scatterplot <- function() {
     plot(father.son, pch=20)
+    #plot(sheight~fheight, data=father.son, pch=20)
 }
 
 fs.scatterplot()
@@ -22,7 +23,10 @@ fs.scatterplot()
 ## What are the coefficients? Save this in a variable named "fs.coef"
 
 fs.lm <- lm(rev(father.son))
+#fs.lm <- lm(sheight~fheight, data=father.son)
+
 fs.coef <- fs.lm$coefficients
+#fs.coef <- coef(fs.lm)
 
 ## Write a function "fs.predict" that takes a fitted "lm" object and a
 ## vector of father heights and outputs the predicted heights of their
@@ -46,7 +50,8 @@ test(unname(fs.predict(fs.lm, 70)), 69.8731, tolerance = 0.0001)
 ## distributed?
 
 plot.residuals <- function() {
-    plot(fitted(fs.lm), resid(fs.lm))
+    plot(fitted(fs.lm), resid(fs.lm), main='residuals versus the fitted values')
+    abline(h=0, col='red')
 }
 
 plot.residuals()
@@ -65,7 +70,7 @@ plot.residuals()
 ## Save the confidence interval as a vector of length 2 named
 ## fheight.slope.confidence.interval
 
-fheight.slope.confidence.interval <- confint(fs.lm)[2,]
+fheight.slope.confidence.interval <- unname(confint(fs.lm)[2,])
 
 ## There are two types of intervals we may be interested in when doing
 ## linear modeling. One interval, called the "confidence interval" or
@@ -106,6 +111,7 @@ test(unname(fs.confidence(fs.lm, 70)), c(69.68266380, 70.06357032))
 ## 2 lines for the lower and upper 95% prediction interval - in blue
 
 plot.bands <- function() {
+    fs.scatterplot()
     abline(fs.lm, col="red")
     pred1 <- fs.confidence(fs.lm, father.son[,1])
     lines(father.son[match(sort(pred1[,1]), pred1[,1]),1], sort(pred1[,1]), col="green")
@@ -132,7 +138,7 @@ plot.bands()
 ## value).
 
 r.squared <- function(y, y.fitted) {
-    return((1-(sum(y-y.fitted))^2)/sum((y-mean(y))^2))
+    return(1-(sum((y-y.fitted)^2))/sum((y-mean(y))^2))
 }
 
 ## What is the r.squared of our linear model on the father-son data?
