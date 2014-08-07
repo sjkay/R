@@ -1,4 +1,4 @@
-# FINAL LAB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# FINAL LAB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! YAY
 library(RUnit)
 errMsg <- function(err) print(err)
 load('lab8-tests.rda')
@@ -20,6 +20,7 @@ load('lab8-tests.rda')
 normalMixture <- function(n1, n2, mu1, var1, mu2, var2) {
 
     # your code here
+    return(c(rnorm(n1, mu1, sqrt(var1)), rnorm(n2, mu2, sqrt(var2))))
 
 }
 
@@ -43,6 +44,9 @@ tryCatch(checkEquals(lab8$normalMixture.t, output.1),
 logGenerator<- function(X, beta0, beta1) {
 
     # your code here
+    y <- beta0 + beta1 * X
+    output <- 1/(1+exp(-y))
+    return(output)
 }
 
 set.seed(47)
@@ -62,6 +66,8 @@ tryCatch(checkEquals(lab8$logGenerator.t, output.2), error=function(err)
 toBinom <- function(p) {
 
     # your code here
+    r.vars <- sapply(p, function(prob) rbinom(1, 1, prob))
+    return(r.vars)
 
 }
 
@@ -81,6 +87,8 @@ tryCatch(checkEquals(lab8$toBinom.t, output.3), error=function(err) errMsg(err))
 mae <- function(true.vals, pred.vals) {
 
     # your code here
+    abs.residuals <- abs(true.vals-pred.vals)
+    return(mean(abs.residuals))
 
 }
 
@@ -90,7 +98,7 @@ tryCatch(checkEquals(1, mae(1:5, 2:6)), error=function(err) errMsg(err))
 # Generate predictor variables using your normalMixture with n1=50, n2=50,
 # mu1=-1, mu2=1, var1=var2=1. Store this value as the variable
 # <x.vals>. Using this data, generate probabilities with your logGenerator
-# function by setting beta0=??? and beta1=???. Store this variable as
+# function by setting beta0=0 and beta1=5. Store this variable as
 # <p.vals>. Using these values, generate binomial random variables using your
 # toBinom function. Store this data as <y.vals>. Create a dataframe called
 # <model.data> where the first column is <x.vals> and the second is
@@ -105,4 +113,14 @@ tryCatch(checkEquals(1, mae(1:5, 2:6)), error=function(err) errMsg(err))
 #otherwise***
 
 set.seed(47)
+x.vals <- normalMixture(50, 50, -1, 1, 1, 1)
+p.vals <- logGenerator(x.vals, 0, 5)
+y.vals <- toBinom(p.vals)
+model.data <- data.frame(x=x.vals, y=y.vals)
 
+fit.lm <- lm(y~x, data=model.data)
+fit.log <- glm(y~x, family=binomial, data=model.data)
+preds.lm <- predict(fit.lm)
+preds.log <- predict(fit.log, type='response')
+mae.lm <- mae(p.vals, preds.lm)
+mae.log <- mae(p.vals, preds.log)
