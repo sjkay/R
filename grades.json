@@ -235,6 +235,23 @@
                     "earned": 14
                 }
             }
+        }, 
+        "hw6": {
+            "note": "", 
+            "hash": "9ece82bf52f9b6a2388c76a006253434c8aee1bf", 
+            "earned": 30, 
+            "possible": 30, 
+            "penalty": 0, 
+            "parts": {
+                "ex1_fig": {
+                    "possible": 10, 
+                    "earned": 10
+                }, 
+                "ex1": {
+                    "possible": 20, 
+                    "earned": 20
+                }
+            }
         }
     }, 
     "login": "sjkay", 
