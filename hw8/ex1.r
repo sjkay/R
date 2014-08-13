@@ -208,13 +208,13 @@ all$df = data.frame(rbind(female$df, male$df), gender=rep(c('f', 'm'), each=100)
 
 # your code here
 cols <- c('red', 'blue')
-plot(all$df[,1:3], col=cols)
+plot(all$df[,1:3], col=cols[all$df[,7]])
 
 # (2 points) Plot a scatterplot matrix from the first six columns of all$df
 # Again make sure that females are colored red and males are colored blue
 
 # your code here
-plot(all$df[,1:6], col=cols)
+plot(all$df[,1:6], col=cols[all$df[,7]])
 
 # (1 point) Create a prcomp object from all$df called pca
 # You will need to remove non-numeric columns first
@@ -241,10 +241,10 @@ reduced <- as.data.frame(drop(scale(hm, center=pca.center, scale=pca.scale) %*%
 	pca$rotation[,1:ncol(pca$rotation)]))
 
 par(mfrow=c(2,2))
-plot(reduced[,c(1,2)], col=cols)
-plot(reduced[,c(2,3)], col=cols)
-plot(reduced[,c(1,3)], col=cols)
-plot(reduced[,c(3,4)], col=cols)
+plot(reduced[,c(1,2)], col=cols[all$df[,7]])
+plot(reduced[,c(2,3)], col=cols[all$df[,7]])
+plot(reduced[,c(1,3)], col=cols[all$df[,7]])
+plot(reduced[,c(3,4)], col=cols[all$df[,7]])
 
 # (1 point) Create a kmeans object using all$df
 # set k to 2 and make sure that you use 10 different initial conditions
