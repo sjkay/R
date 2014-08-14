@@ -44,6 +44,7 @@ set.seed(42)
 
 heights = function(n, ave, sd) {
     # your code here
+    return(rnorm(n, mean=ave, sd=sd))
 }
 
 # (0 points) The weights function is already implemented
@@ -61,8 +62,9 @@ weights = heights
 # from the uniform distribution between the oldest and youngest
 # person.
 
-ages = function(n, min, sd) {
+ages = function(n, min, max) {
     # your code here
+    return(runif(n, min=min, max=max))
 }
 
 # (1 point) Implement the convert.heights function
@@ -76,6 +78,7 @@ ages = function(n, min, sd) {
 
 convert.heights = function(heights) {
     # your code here
+    return(heights * 0.393701)
 }
 
 # (1 point) Implement the convert.weights function
@@ -89,6 +92,7 @@ convert.heights = function(heights) {
 
 convert.weights = function(weights)  {
     # your code here
+    return(weights * 2.20462)
 }
 
 # (2 points) Implement the compute.bmi function
@@ -107,6 +111,11 @@ convert.weights = function(weights)  {
 
 compute.bmi = function(heights, weights)  {
     # your code here
+    if (length(heights)==length(weights)) {
+	heights.m <- heights / 100
+	return(weights / (heights.m ^ 2))
+	}
+	else return(NULL)
 }
 
 # Now you are going to create some datastructures using these functions
@@ -126,6 +135,9 @@ compute.bmi = function(heights, weights)  {
 
 female$df.base = data.frame(
     # your code here
+    height=heights(female$n, female$ave.height, all$height.sd), 
+	weight=weights(female$n, female$ave.weight, all$height.sd), 
+	age=ages(female$n, all$young, all$old)
 )
 
 # (1 point) Create a dataframe male$df.base
@@ -133,6 +145,9 @@ female$df.base = data.frame(
 
 male$df.base = data.frame(
     # your code here
+    height=heights(male$n, male$ave.height, all$height.sd), 
+	weight=weights(male$n, male$ave.weight, all$height.sd), 
+	age=ages(male$n, all$young, all$old)
 )
 
 # (1 point) Create a dataframe female$df
@@ -151,6 +166,12 @@ male$df.base = data.frame(
 
 female$df = data.frame(
     # your code here
+    heights=female$df.base$height, 
+	weights=female$df.base$weight, 
+	age=female$df.base$age, 
+	heights_in_in=convert.heights(female$df.base$height), 
+	weights_in_lbs=convert.weights(female$df.base$weight), 
+	bmi=compute.bmi(female$df.base$height, female$df.base$weight)
 )
 
 # (1 point) Create a dataframe male$df
@@ -158,6 +179,12 @@ female$df = data.frame(
 
 male$df = data.frame(
     # your code here
+    heights=male$df.base$height, 
+	weights=male$df.base$weight, 
+	age=male$df.base$age, 
+	heights_in_in=convert.heights(male$df.base$height), 
+	weights_in_lbs=convert.weights(male$df.base$weight), 
+	bmi=compute.bmi(male$df.base$height, male$df.base$weight)
 )
 
 # (1 point) Create a dataframe all$df
@@ -171,6 +198,7 @@ male$df = data.frame(
 # [5] "weights_in_lbs" "bmi"            "gender"
 
 # all$df = # your code here
+all$df = data.frame(rbind(female$df, male$df), gender=rep(c('f', 'm'), each=100))
 
 # (2 points) Plot a scatterplot matrix from the first three columns of all$df
 # Make sure that females are colored red and males are colored blue
@@ -179,16 +207,20 @@ male$df = data.frame(
 #  http://www.stat.berkeley.edu/classes/s133/R-4a.html
 
 # your code here
+cols <- c('red', 'blue')
+plot(all$df[,1:3], col=cols[all$df[,7]],pch=20)
 
 # (2 points) Plot a scatterplot matrix from the first six columns of all$df
 # Again make sure that females are colored red and males are colored blue
 
 # your code here
+plot(all$df[,1:6], col=cols[all$df[,7]],pch=20)
 
 # (1 point) Create a prcomp object from all$df called pca
 # You will need to remove non-numeric columns first
 
 # pca = # your code here
+pca = prcomp(all$df[,-7])
 
 
 # (4 points) Plot data projected on its principal components
@@ -202,32 +234,49 @@ male$df = data.frame(
 # Again make sure that females are colored red and males are colored blue
 
 # your code here
+pca.center <- pca$center
+pca.scale <- pca$scale
+hm <- as.matrix(all$df[,-c(7:9)])		
+reduced <- as.data.frame(drop(scale(hm, center=pca.center, scale=pca.scale) %*%
+	pca$rotation[,1:ncol(pca$rotation)]))
+
+par(mfrow=c(2,2))
+plot(reduced[,c(1,2)], col=cols[all$df[,7]], pch=20)
+plot(reduced[,c(2,3)], col=cols[all$df[,7]], pch=20)
+plot(reduced[,c(1,3)], col=cols[all$df[,7]], pch=20)
+plot(reduced[,c(3,4)], col=cols[all$df[,7]], pch=20)
 
 # (1 point) Create a kmeans object using all$df
 # set k to 2 and make sure that you use 10 different initial conditions
 
 # full.km # your code here
+full.km = kmeans(all$df[,-7], 2, nstart=10)
 
 # (1 point) Create a hclust object using all$df
 
 # full.hclust = # your code here
+full.hclust = hclust(dist(all$df[,-7]))
 
 # (1 point) Find the labels using cutree with k=2
 
 # full.hclust.labels = # your code here
- 
+ full.hclust.labels = cutree(full.hclust, k=2)
+
 # (1 point) Create a kmeans object using just the first two columns of all$df
 # set k to 2 and make sure that you use 10 different initial conditions
 
 # red.km = # your code here
+red.km = kmeans(all$df[,c(1,2)], 2, nstart=10)
 
 # (1 point) Create a hclust object using just the first two columns of all$df
 
 # red.hclust = # your code here
+red.hclust = hclust(dist(all$df[,c(1,2)]))
 
 # (1 point) Find the labels using cutree with k=2
 
 # red.hclust.labels = # your code here
+red.hclust.labels = cutree(red.hclust, k=2)
 
 
 # (4 point) Plot the data projected on its first two dimensions
@@ -245,3 +294,26 @@ male$df = data.frame(
 # to female and male.
 
 # your code here
+#all$df$km <- full.km$cluster
+#all$df$hclust <- full.hclust.labels
+#reduced$km <- red.km$cluster
+#reduced$hclust <- red.hclust.labels
+
+#par(mfrow=c(2,2))
+#with(all$df, plot(heights, weights, col=cols[km], main='kmeans (full)'))
+#with(all$df, plot(heights, weights, col=cols[hclust], main='hclust (full)'))
+#with(reduced, plot(PC1, PC2, col=cols[km], main='kmeans (reduced)'))
+#with(reduced, plot(PC1, PC2, col=cols[hclust], main='hclust (reduced)'))
+
+all$df$full.km <- full.km$cluster
+all$df$full.hclust <- full.hclust.labels
+all$df$red.km <- red.km$cluster
+all$df$red.hclust <- red.hclust.labels
+
+par(mfrow=c(2,2))
+with(all$df, plot(heights, weights, col=cols[full.km], main='kmeans (full)',pch=20))
+with(all$df, plot(heights, weights, col=cols[full.hclust], main='hclust (full)',pch=20))
+with(all$df, plot(heights, weights, col=cols[red.km], main='kmeans (reduced)',pch=20))
+with(all$df, plot(heights, weights, col=cols[red.hclust], main='hclust (reduced)',pch=20))
+
+
