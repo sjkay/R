@@ -116,14 +116,14 @@ remove.outliers = function(df, cuts) {
 # This is a vector containing the rows of df with any NAs.  You can use the
 # function too.many.na, which you created above.
 
-# na.indices = your code here
+ na.indices = too.many.na(df,0,1)
 
 # (1 point) Create a dataframe df.no.nas
 #
 # This should be a subset of df with all rows containing any NAs removed.
 # You can use na.indices for this step.
 
-# df.no.nas = your code here
+ df.no.nas = df[-na.indices,]
 
 # (1 point) Create a matrix cuts
 #
@@ -134,7 +134,7 @@ remove.outliers = function(df, cuts) {
 # > dim(cuts)
 # [1] 2 4
 
-# cuts = your code here
+ cuts = sapply(df.no.nas, function(x) outlier.cutoff(x,TRUE))
 
 # (1 point) Create a dataframe df.clean
 #
@@ -142,4 +142,4 @@ remove.outliers = function(df, cuts) {
 # as well as any rows with elements outside the cutoffs specified
 # by cuts removed.
 
-# df.clean = your code here
+ df.clean = remove.outliers(df.no.nas,cuts)
