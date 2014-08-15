@@ -14,8 +14,8 @@ load('ex2.rda')
 # their homework grade. Store these as the variables <fit.final> and <fit.labs>
 # respectively
 
-# fit.final = your code here
-# fit.labs = your code here
+ fit.final = lm(final~hw, data=grades)
+ fit.labs = lm(labs~hw, data=grades)
 
 
 # (2 points)
@@ -26,7 +26,7 @@ load('ex2.rda')
 #
 # "final" or "labs"
 
-# contant.var.model = your code here
+ contant.var.model = final
 
 
 # (3 points)
@@ -37,8 +37,8 @@ load('ex2.rda')
 # will need to be accurate up to 5 decimal places)? Store
 # this as the variable <final.r.sq>
 
-# final.slope = your code here
-# labs.intercept = your code here
+ final.slope = fit.final$coefficients[2]
+ labs.intercept = fit.labs$coefficients[1]
 # final.r.sq = your code here
 
 # (2 points)
