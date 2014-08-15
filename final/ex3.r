@@ -36,6 +36,8 @@ load("ex3.rda")
 
 too.many.na = function(df, threshold, axis) {
     # your code here
+    a <- apply(df, axis, function(x) sum(is.na(x))/length(x) >threshold)
+    return(unname(which(a)))
 }
 
 testdf1 = data.frame(1:4, c(NA,1,2,3))
@@ -68,7 +70,9 @@ tryCatch(checkEquals(0, length(too.many.na(testdf1, 0.6, 1))),
 #    IQR is the difference Q3 - Q1
 
 outlier.cutoff = function(x, rm.na){
-    # your code here
+    q1 <- quantile(x,0.25, na.rm=rm.na)
+    q3 <- quantile(x,0.75, na.rm=rm.na)
+    return(c(q1-2.5*(q3-q1),q3+(2.5*(q3,q1)))) 
 }
 
 set.seed(42)
