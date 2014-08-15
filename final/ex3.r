@@ -72,7 +72,7 @@ tryCatch(checkEquals(0, length(too.many.na(testdf1, 0.6, 1))),
 outlier.cutoff = function(x, rm.na){
     q1 <- quantile(x,0.25, na.rm=rm.na)
     q3 <- quantile(x,0.75, na.rm=rm.na)
-    return(c(q1-2.5*(q3-q1),q3+(2.5*(q3,q1)))) 
+    return(unname(c(q1-2.5*(q3-q1),q3+(2.5*(q3-q1))))) 
 }
 
 set.seed(42)
@@ -102,6 +102,10 @@ tryCatch(checkEquals(cuts, unname(outlier.cutoff(x, TRUE)), tolerance=1e-6),
 
 remove.outliers = function(df, cuts) {
     # your code here
+    a <- apply(df, 1, function(x) x<cuts[1] | x>cuts[2])
+    b <- unname(apply(a,1,function(x) which(x))$x1)
+    return(df[-b,])
+    
 }
 
 # Now you are going to create some new datastructures by calling these functions
